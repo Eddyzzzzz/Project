@@ -1,0 +1,33 @@
+EE129 Project 3 
+
+This is a demonstration of the project: https://imgur.com/dnXsYx9 
+
+To Run the program:
+
+- Install mqtt here: https://mqtt.org/getting-started/
+
+- Set up the broker on your computer by running 
+
+    ...(location)/mosquitto.conf 
+
+  You should be able to see the broker starting to accept clients
+
+- Replace the "broker_address" in the main file with your own IP address
+
+- In another terminal go to the folder containing all the files, run
+
+    python3 main.py
+
+  to start publishing to the mqtt topic "Eddy"
+
+- Open a browser and go to 127.0.0.1/8000 to access the joystick 
+  
+- Open another terminal (the 3rd one), run
+
+    mosquitto_sub -t "Eddy" -h your_IP -p 1883
+
+  to subscribe to the mqtt topic "Eddy"
+  
+- Play around with the joystick and see what happens to the subscriber!
+
+- Then you can use mqtt to subscribe to the topic on your Arduino, RaspberryPi, ESP32, or other microcomputers to receive the joystick values and use it to control DC motors to drive a little car remotely through your webpage! It also supports multiple subscribers.
