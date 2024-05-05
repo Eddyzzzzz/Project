@@ -13,14 +13,17 @@ from response.badRequestHandler import BadRequestHandler
 import threading
 
 # Replace this with your own IP address
-broker_address='10.5.15.62'
+broker_address='xxx.xxx.xxx.xxx'
 
+# Initiate client
 client = mqtt.Client("Eddy") 
 client.connect(broker_address)
 
+# Define port and host
 HOST_NAME = '127.0.0.1'
 PORT_NUMBER = 8000
 
+# Web page code
 page = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -204,10 +207,13 @@ page = '''
 </body>
 </html>
 '''
+
+# Method for parsing and sending mqtt messages
 def send_mqtt_message(x, y):
     message = f"{x},{y}"
     client.publish("Remote", message)
 
+# Server class, implementation of GET method
 class Server(BaseHTTPRequestHandler):    
 
     # def infinite_loop():
@@ -218,11 +224,15 @@ class Server(BaseHTTPRequestHandler):
         return
 
     def do_GET(self):
+
         split_path = os.path.splitext(self.path)
         request_extension = split_path[1]
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
+
+        # send header
+        self.send_response(200) #response time
+        self.send_header("Content-type", "text/html") 
         self.end_headers()
+
         # if request_extension == "" or request_extension == ".html":
         #     if self.path in routes:
         #         handler = TemplateHandler()
@@ -238,6 +248,7 @@ class Server(BaseHTTPRequestHandler):
         #     'handler': handler
         # })
 
+        # convert data to right format and send
         self.wfile.write(bytes(page, "utf-8"))
         if '/send' in self.path:
             x = self.path.split('=')[1].split(',')[0]
@@ -250,6 +261,7 @@ if __name__ == '__main__':
     print(time.asctime(), 'Server UP - %s:%s' % (HOST_NAME, PORT_NUMBER))
     
     try:
+        # keep the server alive 
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
